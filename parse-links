@@ -1,16 +1,42 @@
 #!/bin/bash
 
-# alle router herausfinden (links)
+FILE="router.json"
+TODAY=$(date -u +%Y%m%d)
+ROUTER="TEST-WR1046v15"
+
+rm $FILE
+
+
+# get links for router download pages from wiki
 A=$(wget -q "https://wiki.freifunk.net/Berlin:Firmware" -O -)
 B=$(echo $A | grep -Po '(?<=href=")[^"]*' | grep util)
 
-# von allen Router downloadlinks parsen
+
+# write begin of json file
+echo "{" >> $FILE
+echo "  \"date\":\"$TODAY\"," >> $FILE
+
+
+# parse links for upgrade files
 for LINK in $B; do
   C=$(wget -q "$LINK" -O -)
   D=($(echo $C | grep -Po '(?<=href=")[^"]*' | grep /stable/ | grep "sysupgrade.bin"))
-  # D is an array. show INDEX of array
-  echo ${D[1]}
+
+  # omit routers with legacy support
+  if [[ "${D[1]}" = *"default_4MB"* ]]; then
+    continue
+  fi
+
+  # write links in json. omit routers which do not have links
+  if [ ${D[1]} != "" ]; then
+    echo "  \"$ROUTER\":" >> $FILE
+    echo "  {" >> $FILE
+    echo "    \"default\": \"${D[3]}\"," >> $FILE
+    echo "    \"tunneldigger\": \"${D[1]}\"" >> $FILE
+    echo "  }" >> $FILE
+  fi
+
 done
 
-#TUNNELDIGGER=$(echo $LINKS | grep tunneldigger)
-#echo $TUNNELDIGGER
+# write end of json
+echo "}" >> $FILE
