@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# alle router herausfinden (links)
+A=$(wget -q "https://wiki.freifunk.net/Berlin:Firmware" -O -)
+B=$(echo $A | grep -Po '(?<=href=")[^"]*' | grep util)
+
+# von allen Router downloadlinks parsen
+for LINK in $B; do
+  C=$(wget -q "$LINK" -O -)
+  D=($(echo $C | grep -Po '(?<=href=")[^"]*' | grep /stable/ | grep "sysupgrade.bin"))
+  # D is an array. show INDEX of array
+  echo ${D[1]}
+done
+
+#TUNNELDIGGER=$(echo $LINKS | grep tunneldigger)
+#echo $TUNNELDIGGER

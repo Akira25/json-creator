@@ -1,0 +1,5 @@
+#!/bin/bash
+
+LINKS=$(while read line; do echo "$line"; done < links.txt)
+
+echo $LINKS | grep tunneldigger
