@@ -4,7 +4,10 @@ FILE="router.json"
 TODAY=$(date -u +%Y%m%d)
 ROUTER="TEST-WR1046v15"
 
-rm $FILE
+
+if [ -f $FILE ]; then
+  rm $FILE
+fi
 
 
 # get links for router download pages from wiki
