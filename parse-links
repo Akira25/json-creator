@@ -2,8 +2,8 @@
 
 FILE="router.json"
 TODAY=$(date -u +%Y%m%d)
-ROUTER="TEST-WR1046v15"
-
+COUNTER=1
+ROUTER="TEST-WR1046v"
 
 if [ -f $FILE ]; then
   rm $FILE
@@ -29,14 +29,14 @@ for LINK in $B; do
   if [[ "${D[1]}" = *"default_4MB"* ]]; then
     continue
   fi
-
+  let COUNTER=$COUNTER+1
   # write links in json. omit routers which do not have links
   if [ ${D[1]} != "" ]; then
-    echo "  \"$ROUTER\":" >> $FILE
+    echo "  \"$ROUTER$COUNTER\":" >> $FILE
     echo "  {" >> $FILE
     echo "    \"default\": \"${D[3]}\"," >> $FILE
     echo "    \"tunneldigger\": \"${D[1]}\"" >> $FILE
-    echo "  }" >> $FILE
+    echo "  }," >> $FILE
   fi
 
 done
