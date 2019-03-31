@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# This script parses the router names of avaiable Freifunk routers from the wiki page of Freifunk Berlin.
+# The dictionary do translate the names of the website into the ones used by the routers itself. They need to be added by hand.
+
+
+FILE="router_dict.json"
+BKUP="router_dict.json.bak"
+TODAY=$(date -u +%Y%m%d)
+
+#keep the last file as backup
+if [ -f $FILE ]; then
+  mv $FILE $BKUP
+fi
+
+
+# get links for router download pages from wiki
+A=$(wget -q "https://wiki.freifunk.net/Berlin:Firmware" -O -)
+B=$(echo $A | grep -Po '(?<=href=")[^"]*' | grep util)
+
+
+# write begin of json file
+echo "{" >> $FILE
+
+
+# parse links for upgrade files
+for LINK in $B; do
+  MODEL=$(echo "$LINK" | cut -d'=' -f 2)
+  C=$(wget -q "$LINK" -O -)
+  D=($(echo $C | grep -Po '(?<=href=")[^"]*' | grep /stable/ | grep "sysupgrade.bin"))
+
+  # omit routers with legacy support
+  if [[ "${D[1]}" = *"default_4MB"* ]]; then
+    continue
+  fi
+
+  # omit routers with unstable support
+  if [ -z "$D" ]; then
+    continue
+  fi
+
+
+  # write links in json. omit routers which do not have links
+  if [ ${D[1]} != "" ]; then
+    echo "  \"$MODEL\": \" \"," >> $FILE
+  fi
+
+done
+
+# write empty object (dirty solution to avoid incorrect json-code
+echo "  \"null\": \" \"" >> $FILE
+
+# write end of json
+echo "}" >> $FILE
