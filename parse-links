@@ -1,12 +1,36 @@
 #!/bin/bash
 
+# This script parse the download links for sysupgrade images from Freifunk Berlin wiki.
+# Before using this script the dictionary file must be genrated and completed by hand.
+
 FILE="router.json"
 TODAY=$(date -u +%Y%m%d)
-COUNTER=1
-ROUTER="TEST-WR1046v"
+DICT_FILE="router_dict.json"
+BKUP="router.json.bak"
 
+
+
+JQ_CHECK=$(which jq)
+if [ -z $JQ_CHECK ]; then
+  echo "To get this script working, 'jq' needs to be installed. Get it by typing"
+  echo ""
+  echo "        'sudo apt install jq'"
+  echo ""
+  exit 1
+fi
+
+
+if [ ! -f $DICT_FILE ]; then
+  echo "There is no dictionary file. Please generate it first and"
+  echo "add the native model names by hand. (have a look at /proc/cpuinfo)"
+  echo ""
+  exit 1
+fi
+
+
+#keep the last file as backup
 if [ -f $FILE ]; then
-  rm $FILE
+  mv $FILE $BKUP
 fi
 
 
@@ -15,6 +39,14 @@ A=$(wget -q "https://wiki.freifunk.net/Berlin:Firmware" -O -)
 B=$(echo $A | grep -Po '(?<=href=")[^"]*' | grep util)
 
 
+#Do a list of routers here
+#for MODEL in $B; do
+#  echo $MODEL | cut -d'=' -f 2
+#done
+
+#echo "wait 10 seconds"
+#sleep 10
+
 # write begin of json file
 echo "{" >> $FILE
 echo "  \"date\":\"$TODAY\"," >> $FILE
@@ -22,6 +54,8 @@ echo "  \"date\":\"$TODAY\"," >> $FILE
 
 # parse links for upgrade files
 for LINK in $B; do
+  MODEL=$(echo "$LINK" | cut -d'=' -f 2)
+  ROUTER=$(jq  -r --arg mod "$MODEL" '.[$mod]' $DICT_FILE)
   C=$(wget -q "$LINK" -O -)
   D=($(echo $C | grep -Po '(?<=href=")[^"]*' | grep /stable/ | grep "sysupgrade.bin"))
 
@@ -29,10 +63,17 @@ for LINK in $B; do
   if [[ "${D[1]}" = *"default_4MB"* ]]; then
     continue
   fi
-  let COUNTER=$COUNTER+1
+
+  # omit routers with unstable support
+  if [ -z "$D" ]; then
+    continue
+  fi
+
+
+  #let COUNTER=$COUNTER+1
   # write links in json. omit routers which do not have links
   if [ ${D[1]} != "" ]; then
-    echo "  \"$ROUTER$COUNTER\":" >> $FILE
+    echo "  \"$ROUTER\":" >> $FILE
     echo "  {" >> $FILE
     echo "    \"default\": \"${D[3]}\"," >> $FILE
     echo "    \"tunneldigger\": \"${D[1]}\"" >> $FILE
@@ -40,6 +81,10 @@ for LINK in $B; do
   fi
 
 done
+
+# delete final }, and replace with }
+head -n -1 $FILE > temp ; mv temp $FILE
+echo "  }" >> $FILE
 
 # write end of json
 echo "}" >> $FILE
