@@ -3,7 +3,7 @@
 # This scripts gets the router model. That name shall be placed in a dictionary used by json-creator.
 # https://github.com/Akira25/json-creator
 
-ROUTER=$(grep machine /proc/cpuinfo| cut -d':' -f 2)
+ROUTER=$(grep machine /proc/cpuinfo | cut -d':' -f 2 | cut -c 2-)
 echo "$ROUTER"
 echo "$ROUTER" > routermodel.txt
 echo "written router model to routermodel.txt"
