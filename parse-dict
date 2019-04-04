@@ -30,14 +30,14 @@ for LINK in $B; do
   D=($(echo $C | grep -Po '(?<=href=")[^"]*' | grep /stable/ | grep "sysupgrade.bin"))
 
   # omit routers with legacy support
-  if [[ "${D[1]}" = *"default_4MB"* ]]; then
-    continue
-  fi
+  #if [[ "${D[1]}" = *"default_4MB"* ]]; then
+  #  continue
+  #fi
 
   # omit routers with unstable support
-  if [ -z "$D" ]; then
-    continue
-  fi
+  #if [ -z "$D" ]; then
+  #  continue
+  #fi
 
 
   # write links in json. omit routers which do not have links
