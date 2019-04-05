@@ -41,7 +41,7 @@ for LINK in $B; do
 
 
   # write links in json. omit routers which do not have links
-  if [ ${D[1]} != "" ]; then
+  if [ "${D[1]}" != "" ]; then
     echo "  \"$MODEL\": null," >> $FILE
   fi
 
