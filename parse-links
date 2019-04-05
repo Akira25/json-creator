@@ -65,19 +65,23 @@ for LINK in $B; do
   fi
 
   # omit routers with unstable support
-  if [ -z "$D" ]; then
-    continue
-  fi
+  #if [ -z "$D" ]; then
+  #  continue
+  #fi
 
 
   #let COUNTER=$COUNTER+1
   # write links in json. omit routers which do not have links
   if [ ${D[1]} != "" ]; then
-    echo "  \"$ROUTER\":" >> $FILE
-    echo "  {" >> $FILE
-    echo "    \"default\": \"${D[3]}\"," >> $FILE
-    echo "    \"tunneldigger\": \"${D[1]}\"" >> $FILE
-    echo "  }," >> $FILE
+    if [ "$ROUTER" != "null" ]; then
+      echo "  \"$ROUTER\":" >> $FILE
+      echo "  {" >> $FILE
+      echo "    \"default\": \"${D[3]}\"," >> $FILE
+      echo "    \"tunneldigger\": \"${D[1]}\"" >> $FILE
+      echo "  }," >> $FILE
+    else
+      continue
+    fi
   fi
 
 done

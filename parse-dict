@@ -42,12 +42,12 @@ for LINK in $B; do
 
   # write links in json. omit routers which do not have links
   if [ ${D[1]} != "" ]; then
-    echo "  \"$MODEL\": \" \"," >> $FILE
+    echo "  \"$MODEL\": null," >> $FILE
   fi
 
 done
 
-# write empty object (dirty solution to avoid incorrect json-code
+# write empty object (dirty hack to avoid incorrect json-code. To be solved more nice in future...)
 echo "  \"null\": \" \"" >> $FILE
 
 # write end of json
