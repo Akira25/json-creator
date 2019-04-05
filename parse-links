@@ -72,7 +72,7 @@ for LINK in $B; do
 
   #let COUNTER=$COUNTER+1
   # write links in json. omit routers which do not have links
-  if [ ${D[1]} != "" ]; then
+  if [ "${D[1]}" != "" ]; then
     if [ "$ROUTER" != "null" ]; then
       echo "  \"$ROUTER\":" >> $FILE
       echo "  {" >> $FILE
