@@ -27,7 +27,7 @@ echo "{" >> $FILE
 for LINK in $B; do
   MODEL=$(echo "$LINK" | cut -d'=' -f 2)
   C=$(wget -q "$LINK" -O -)
-  D=($(echo $C | grep -Po '(?<=href=")[^"]*' | grep /stable/ | grep "sysupgrade.bin"))
+  D=($(echo $C | grep -Po '(?<=href=")[^"]*' | grep "sysupgrade.bin"))
 
   # omit routers with legacy support
   #if [[ "${D[1]}" = *"default_4MB"* ]]; then
