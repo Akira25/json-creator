@@ -48,7 +48,7 @@ for LINK in $B; do
 done
 
 # write empty object (dirty solution to avoid incorrect json-code
-echo "  \"null\": \" \"" >> $FILE
+echo "  \"null\": null" >> $FILE
 
 # write end of json
 echo "}" >> $FILE
