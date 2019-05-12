@@ -5,7 +5,7 @@
 
 FILE="router.json"
 TODAY=$(date -u +%Y%m%d)
-DICT_FILE="router_dict.json"
+DICT_FILE="dict.json"
 BKUP="router.json.bak"
 
 
@@ -69,11 +69,12 @@ for LINK in $B; do
   #  continue
   #fi
 
-
-  #let COUNTER=$COUNTER+1
   # write links in json. omit routers which do not have links
   if [ "${D[1]}" != "" ]; then
     if [ "$ROUTER" != "null" ]; then
+      #status prompt
+      echo "Writing $ROUTER to link-file ..."
+
       echo "  \"$ROUTER\":" >> $FILE
       echo "  {" >> $FILE
       echo "    \"default\": \"${D[3]}\"," >> $FILE

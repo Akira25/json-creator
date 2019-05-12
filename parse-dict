@@ -4,8 +4,8 @@
 # The dictionary do translate the names of the website into the ones used by the routers itself. They need to be added by hand.
 
 
-FILE="router_dict.json"
-BKUP="router_dict.json.bak"
+FILE="dict.json"
+BKUP="dict.json.bak"
 TODAY=$(date -u +%Y%m%d)
 
 #keep the last file as backup
@@ -39,6 +39,8 @@ for LINK in $B; do
   #  continue
   #fi
 
+  #give some status prompt
+  echo "parsing $MODEL ..."
 
   # write links in json. omit routers which do not have links
   if [ "${D[1]}" != "" ]; then
