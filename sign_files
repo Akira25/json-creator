@@ -1,0 +1,15 @@
+SIGNIFY_CHECK=$(which signify)
+if [ ! -z $JQ_CHECK ]; then
+  echo ""
+  echo "To get this script working, 'signify' needs to be installed. Please get"
+  echo "get it from https://github.com/rescrv/signify and compile it for your system."
+  echo ""
+  exit 1
+fi
+
+SEC_KEY="test.sec"
+FILES=$(find router*.json)
+
+for FILE in $FILES; do
+  signify -S -s "$SEC_KEY" -m "$FILE"
+done

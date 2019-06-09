@@ -1,0 +1,7 @@
+KEY_FILE="test.pub"
+FILES=$(find router*.json)
+
+for FILE in $FILES; do
+  echo "$FILE"
+  signify -V -p "$KEY_FILE" -m "$FILE"
+done
