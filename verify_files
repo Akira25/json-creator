@@ -1,5 +1,5 @@
 KEY_FILE="test.pub"
-FILES=$(find router*.json)
+FILES=$(find *.json)
 
 for FILE in $FILES; do
   echo "$FILE"

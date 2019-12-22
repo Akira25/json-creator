@@ -3,10 +3,10 @@
 # This script parse the download links for sysupgrade images from Freifunk Berlin wiki.
 # Before using this script the dictionary file must be genrated and completed by hand.
 
-FILE="router_development.json"
+FILE="development.json"
 TODAY=$(date -u +%Y%m%d)
 DICT_FILE="dict.json"
-BKUP="router_development.json.bak"
+BKUP="$FILE".bak
 
 #http://freifunk.pcfw.eu/router_release.json
 #http://freifunk.pcfw.eu/router_development.json
