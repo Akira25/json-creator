@@ -1,7 +1,7 @@
 # json-creator
-This collection of scripts helps to genereate the json-files for *autoupdate*. https://github.com/Akira25/autoupdate
+This script genereates the json-files for *autoupdate*. https://github.com/Akira25/autoupdate
 
-### parse-dict
+### parse-dict (wil be soon deprecated)
 This script gets the router models from the wiki page of Freifunk Berlin and saves their (buildbot-) names
 in a dictionary. In a second step the routers (internal-) names must be added by hand.
 
@@ -9,13 +9,14 @@ in a dictionary. In a second step the routers (internal-) names must be added by
 This gets the internal name of a router and saves it at `routermodel.txt`. That string needs to be added
 into the dictionary by hand.
 
-Please feel free to send me the names of router models and their corresponding strings. I will add them into the dict-file in this repository
+*autoupdate* fetches the same string and sends it to a server, if invoked like this: `autoupdate -s`. This is 
+done automatically every week.
 
-### parse-links
-Finally parse-links will create a link definition file, containing the download links for the firmware files and the router names.
-Only routers which name ist defined in the dict-file will be included.
+### json-creator.py
+json-creator.py will create a link definition file, containing the download links for the firmware files and the router names.
+You can choose different "branches" to be generated. Please refer `json-creator.py -h`
 
-## General Structure of router.json
+## General Structure of json-files
 
 ```JSON
 {
@@ -24,11 +25,13 @@ Only routers which name ist defined in the dict-file will be included.
   {
     "default": "http://link-to-sysupgrade.bin",
     "tunneldigger": "http://link-to-sysupgrade.bin"
+	"...": "..."
   },
   "ROUTER-NAME#2":
   {
     "default": "http://link-to-sysupgrade.bin",
     "tunneldigger": "http://link-to-sysupgrade.bin"
+	"...": "..."
   }
 }
 ```
