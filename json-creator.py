@@ -53,10 +53,13 @@ def write_file(r_dict, filename):
 
 
 def load_routername_dict():
-    g = open("routernames_dict.json", "r")
     routernamedict = {}
-    routernamedict = json.loads(g.read())
-    g.close()
+    
+    if os.path.isfile("routernames_dict.json"):
+        g = open("routernames_dict.json", "r")
+        routernamedict = json.loads(g.read())
+        g.close()
+    
     return routernamedict
 
 
@@ -264,6 +267,14 @@ if func == "-h":
     print_help()
     exit(0)
 
+if func == "-s":
+    # give fetch_routers() an empty dictionary. Otherwise, function will generate a dictionary
+    # not with the buildbot-names as keys, but with the routerstrings.
+    routernames = {}
+    complete_router_list = fetch_routers(routernames)
+    generate_dict(complete_router_list)
+    exit(0)
+
 # get routername-strings from dict. While fetching the download links, already replace
 # the builbot names by the original ones.
 routernamedict = load_routername_dict()
@@ -281,8 +292,6 @@ while arg_index < argc:
         sort_release(complete_router_list, True)
     elif func == "-d":
         sort_development(complete_router_list)
-    elif func == "-s":
-        generate_dict(complete_router_list)
     elif func == "-a":
         write_all(complete_router_list)
     else:

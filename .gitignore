@@ -1,3 +1,5 @@
 test*
-router*
 upload.sh
+keys
+.kdev4
+*.kdev4
