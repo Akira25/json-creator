@@ -72,6 +72,20 @@ def rename_router(router, routernamedict):
         return new_router
 
 
+def rename_type(website_form):
+    """transform the firmware-types from buildbot-form into autoupdate-form"""
+    type_dict = {
+        "tunnel-berlin-tunneldigger": "tunneldigger",
+        "tunnel-berlin-tunneldigger_4MB": "tunneldigger",
+        "default_4MB": "default"
+        }
+    
+    if type_dict.get(website_form) != None:
+        return type_dict.get(website_form)
+    
+    return website_form
+
+
 def sort_release(r_dict, testing):
     # store the routers with release status at seperate list.
     stables = {}
@@ -185,6 +199,8 @@ def fetch_routers(routernamedict):
         for link in image_links:
             if 'sysupgrade' in link:
                 firmware_type = str(link).split("/")[-2]
+                #transform buildbot types to autoupdate tpes
+                firmware_type = rename_type(firmware_type)
                 images[firmware_type] = link
 
         # if there weren't any links (due to development-firmware), try to get the image-links again.
