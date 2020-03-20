@@ -2,6 +2,7 @@
 
 from bs4 import BeautifulSoup
 from datetime import datetime as date
+import time
 import urllib.request
 import os
 import json
@@ -90,8 +91,8 @@ def sort_release(r_dict, testing):
     # store the routers with release status at seperate list.
     stables = {}
     for router in r_dict:
-        # continue, if current elem is creation date string.
-        if router == "date":
+        # continue, if current elem is creation time.
+        if router == "time":
             stables[router] = r_dict.get(router)
             continue
 
@@ -117,8 +118,8 @@ def sort_development(r_dict):
     # store the routers with release status at seperate list.
     devs = {}
     for router in r_dict:
-        # continue, if current elem is creation date string.
-        if router == "date":
+        # continue, if current elem is creation time.
+        if router == "time":
             devs[router] = r_dict.get(router)
             continue
 
@@ -149,10 +150,13 @@ def generate_dict(r_dict):
     for router in router_list:
         name_dict[router] = " "
 
+    creation_time = int(time.time())
+    name_dict["time"] = creation_time
+    
     # if there is already a file, make a backup.
     # filename includes date of backup
     if os.path.isfile("routernames_dict.json"):
-        today = date.now().strftime("%Y-%m-%d_%H-%M_")
+        today = time.strftime("%Y-%m-%d_%H-%M_")
         current_dir = os.getcwd()
         os.rename(current_dir+"/routernames_dict.json",
                   current_dir+"/"+today+"routernames_dict.json.bak")
@@ -170,14 +174,14 @@ def fetch_routers(routernamedict):
     # removing didnt work reliable... thus second try with appending
     links = []
     for link in router_links:
-        if 'util' in link:
+        if 'util.berlin.freifunk.net' in link:
             links.append(link)
 
     # dict to save the routers and their links
     routers = {}
-    # add creation date as
-    today = date.today()
-    routers["date"] = str(today.strftime("%Y%m%d"))
+    # add creation time
+    creation_time = int(time.time())
+    routers["time"] = creation_time
 
     # parse the images for the routers
     for link in links:
@@ -235,7 +239,7 @@ def fetch_routers(routernamedict):
     dictionary = g.read()
     data = {}
     data = json.loads(dictionary)
-    data.pop("date")
+    data.pop("time")
     g.close()
     print("fetching done.")
     
