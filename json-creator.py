@@ -92,7 +92,7 @@ def sort_release(r_dict, testing):
     stables = {}
     for router in r_dict:
         # continue, if current elem is creation time.
-        if router == "time":
+        if router == "creation_time":
             stables[router] = r_dict.get(router)
             continue
 
@@ -119,7 +119,7 @@ def sort_development(r_dict):
     devs = {}
     for router in r_dict:
         # continue, if current elem is creation time.
-        if router == "time":
+        if router == "creation_time":
             devs[router] = r_dict.get(router)
             continue
 
@@ -151,7 +151,7 @@ def generate_dict(r_dict):
         name_dict[router] = " "
 
     creation_time = int(time.time())
-    name_dict["time"] = creation_time
+    name_dict["creation_time"] = creation_time
     
     # if there is already a file, make a backup.
     # filename includes date of backup
@@ -181,7 +181,7 @@ def fetch_routers(routernamedict):
     routers = {}
     # add creation time
     creation_time = int(time.time())
-    routers["time"] = creation_time
+    routers["creation_time"] = creation_time
 
     # parse the images for the routers
     for link in links:
